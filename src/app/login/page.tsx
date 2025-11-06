@@ -1,0 +1,11 @@
+import { Toaster } from 'sonner';
+import { LoginForm } from '@/components/auth/login-form';
+
+export default function LoginPage() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 px-4">
+      <LoginForm />
+      <Toaster position="top-center" richColors />
+    </div>
+  );
+}

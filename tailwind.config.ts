@@ -16,6 +16,7 @@ const config: Config = {
           800: '#161B33',
           700: '#1F2937',
           600: '#374151',
+          500: '#4B5563',
         },
         // Resource colors
         metal: {
