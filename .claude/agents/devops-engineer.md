@@ -130,7 +130,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
-          alias-domains: staging.space-game.com
+          alias-domains: staging.lunaris.game
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -446,7 +446,7 @@ const galaxyView = await getCached(
 // next.config.js
 module.exports = {
   images: {
-    domains: ['cdn.space-game.com'],
+    domains: ['cdn.lunaris.game'],
     formats: ['image/avif', 'image/webp'],
   },
   compress: true,
@@ -511,7 +511,7 @@ module.exports = {
 **Diagnostics**:
 ```bash
 # Check response times
-curl -w "@curl-format.txt" -o /dev/null -s https://space-game.com/api/planets
+curl -w "@curl-format.txt" -o /dev/null -s https://lunaris.game/api/planets
 
 # Check database connection pool
 psql $DATABASE_URL -c "SELECT count(*) FROM pg_stat_activity;"

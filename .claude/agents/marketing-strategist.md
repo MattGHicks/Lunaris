@@ -159,7 +159,7 @@ Invoke this agent when:
 - "Behind the Scenes: Combat System"
 
 **Comparison Content** (Competitive keywords):
-- "Space Game vs OGame: What's Different?"
+- "Lunaris vs OGame: What's Different?"
 - "Top 10 Browser MMOs in 2025"
 - "Free vs Premium: Is It Pay-to-Win?"
 ```
@@ -167,12 +167,12 @@ Invoke this agent when:
 ### On-Page SEO
 ```html
 <!-- Homepage optimized for "space strategy game" -->
-<title>Space Game - Free Browser Space Strategy MMO</title>
+<title>Lunaris - Free Browser Space Strategy MMO</title>
 <meta name="description" content="Build your space empire, research technologies, command fleets, and conquer the galaxy in this free browser-based strategy MMO. No download required." />
-<meta name="keywords" content="space game, strategy MMO, browser game, fleet combat, space empire" />
+<meta name="keywords" content="lunaris, space game, strategy MMO, browser game, fleet combat, space empire" />
 
 <!-- Open Graph for social sharing -->
-<meta property="og:title" content="Space Game - Build Your Space Empire" />
+<meta property="og:title" content="Lunaris - Build Your Space Empire" />
 <meta property="og:description" content="Free browser MMO with fleet battles, PvE campaigns, and alliance warfare" />
 <meta property="og:image" content="/images/og-image.jpg" />
 ```
@@ -350,7 +350,7 @@ Sunday: Community roundup
 ## Launch Messaging
 
 ### Positioning
-"Space Game is the modern evolution of classic browser space strategy, combining nostalgic gameplay with modern features like PvE campaigns, enhanced graphics, and mobile support."
+"Lunaris is the modern evolution of classic browser space strategy, combining nostalgic gameplay with modern features like PvE campaigns, enhanced graphics, and mobile support."
 
 ### Key Messages
 1. **Free to Play**: "No pay-to-win, truly free"

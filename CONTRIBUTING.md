@@ -1,6 +1,6 @@
-# Contributing to Space Game
+# Contributing to Lunaris
 
-Thank you for your interest in contributing to Space Game! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Lunaris! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -101,8 +101,8 @@ Mockups, examples, or references.
 1. **Fork the Repository**
    ```bash
    # Click "Fork" on GitHub
-   git clone https://github.com/YOUR_USERNAME/space-game.git
-   cd space-game
+   git clone https://github.com/YOUR_USERNAME/lunaris.git
+   cd lunaris
    ```
 
 2. **Create a Branch**
@@ -156,7 +156,7 @@ Mockups, examples, or references.
    ```
 
 8. **Create Pull Request**
-   - Go to the [Space Game repository](https://github.com/yourusername/space-game)
+   - Go to the [Lunaris repository](https://github.com/yourusername/lunaris)
    - Click "New Pull Request"
    - Select your branch
    - Fill out the PR template
@@ -370,7 +370,7 @@ test(combat): add edge case tests
 
 ```env
 # Required
-DATABASE_URL="postgresql://user:password@localhost:5432/space_game"
+DATABASE_URL="postgresql://user:password@localhost:5432/lunaris"
 NEXTAUTH_SECRET="generate-random-secret"
 NEXTAUTH_URL="http://localhost:3000"
 
@@ -391,9 +391,9 @@ NEXT_PUBLIC_GA_ID=""
 
 ### Contact
 
-- **Discord**: [Join our Discord](https://discord.gg/space-game)
-- **GitHub Discussions**: [Ask questions](https://github.com/yourusername/space-game/discussions)
-- **Email**: dev@space-game.com
+- **Discord**: [Join our Discord](https://discord.gg/lunaris)
+- **GitHub Discussions**: [Ask questions](https://github.com/yourusername/lunaris/discussions)
+- **Email**: dev@lunaris.game
 
 ## Recognition
 
@@ -405,10 +405,10 @@ Contributors will be:
 
 ## License
 
-By contributing to Space Game, you agree that your contributions will be licensed under the MIT License.
+By contributing to Lunaris, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-Thank you for contributing to Space Game! 🚀
+Thank you for contributing to Lunaris! 🚀
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

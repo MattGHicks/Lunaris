@@ -1,10 +1,10 @@
-# Space Game - AI Development Studio
+# Lunaris - AI Development Studio
 
-This file contains the project context, standards, and AI agent coordination rules for the Space Game project.
+This file contains the project context, standards, and AI agent coordination rules for the Lunaris project.
 
 ## Project Overview
 
-**Space Game** is a modern recreation of OGame, a classic browser-based space strategy MMO. We're building it with modern web technologies, enhanced features, rich PvE content, and fair monetization.
+**Lunaris** is a modern recreation of OGame, a classic browser-based space strategy MMO. We're building it with modern web technologies, enhanced features, rich PvE content, and fair monetization.
 
 ### Vision
 Create the most engaging and accessible space strategy MMO that combines the depth of classic games like OGame with modern features, fair monetization, and rich PvE content.
@@ -45,7 +45,7 @@ Create the most engaging and accessible space strategy MMO that combines the dep
 ## Project Structure
 
 ```
-space-game/
+lunaris/
 ├── .claude/                          # AI Configuration (YOU ARE HERE!)
 │   ├── agents/                       # 10 specialized AI agents
 │   ├── skills/                       # Reusable workflows

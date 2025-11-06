@@ -1,4 +1,4 @@
-# Space Game
+# Lunaris
 
 > A modern recreation of OGame with enhanced features, PvE content, and fair monetization
 
@@ -40,8 +40,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/space-game.git
-   cd space-game
+   git clone https://github.com/yourusername/lunaris.git
+   cd lunaris
    ```
 
 2. **Install dependencies**
@@ -56,7 +56,7 @@
 
    Edit `.env.local` with your configuration:
    ```env
-   DATABASE_URL="postgresql://user:password@localhost:5432/space_game"
+   DATABASE_URL="postgresql://user:password@localhost:5432/lunaris"
    NEXTAUTH_SECRET="your-secret-here"
    NEXTAUTH_URL="http://localhost:3000"
    ```
@@ -83,7 +83,7 @@
 ## 📁 Project Structure
 
 ```
-space-game/
+lunaris/
 ├── .claude/                   # AI Development Studio
 │   ├── agents/                # 10 specialized AI agents
 │   ├── skills/                # 4 reusable workflows
@@ -239,12 +239,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-- Discord: [Join our community](https://discord.gg/space-game)
-- Twitter: [@SpaceGameDev](https://twitter.com/SpaceGameDev)
-- Email: support@space-game.com
+- Discord: [Join our community](https://discord.gg/lunaris)
+- Twitter: [@LunarisGame](https://twitter.com/LunarisGame)
+- Email: support@lunaris.game
 
 ---
 
-Made with ❤️ by the Space Game team
+Made with ❤️ by the Lunaris team
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

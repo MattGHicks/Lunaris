@@ -5,10 +5,11 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Space Game - Build Your Space Empire',
+  title: 'Lunaris - Build Your Space Empire',
   description:
     'A modern space strategy MMO with real-time gameplay, fleet battles, and alliance warfare. Build your empire, research technologies, and conquer the galaxy.',
   keywords: [
+    'lunaris',
     'space game',
     'strategy MMO',
     'browser game',

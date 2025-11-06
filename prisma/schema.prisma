@@ -1,4 +1,4 @@
-// Prisma schema for Space Game
+// Prisma schema for Lunaris
 generator client {
   provider = "prisma-client-js"
 }

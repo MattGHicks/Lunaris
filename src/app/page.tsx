@@ -3,7 +3,7 @@ export default function HomePage() {
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-space-900 via-space-800 to-space-900">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
         <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Space <span className="text-primary">Game</span>
+          <span className="text-primary">Lunaris</span>
         </h1>
 
         <p className="text-center text-2xl text-gray-300">
