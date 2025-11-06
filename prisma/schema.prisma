@@ -1,0 +1,250 @@
+// Prisma schema for Space Game
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User account
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  passwordHash  String    @map("password_hash")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  planets       Planet[]
+  research      Research?
+  fleets        Fleet[]
+  messages      Message[]  @relation("MessageRecipient")
+  sentMessages  Message[]  @relation("MessageSender")
+  alliance      Alliance?  @relation(fields: [allianceId], references: [id])
+  allianceId    String?    @map("alliance_id")
+
+  // Premium features
+  officers      Officer?
+
+  @@index([email])
+  @@index([username])
+  @@map("users")
+}
+
+// Planet or Moon
+model Planet {
+  id            String    @id @default(cuid())
+  name          String
+  galaxy        Int
+  system        Int
+  position      Int
+  coordinates   String    @unique // "1:234:5"
+
+  // Planet properties
+  fields        Int       @default(163)
+  usedFields    Int       @default(0) @map("used_fields")
+  temperature   Int       @default(20)
+  isMoon        Boolean   @default(false) @map("is_moon")
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String    @map("user_id")
+
+  buildings     Building[]
+  resources     Resources?
+  fleetsFrom    Fleet[]   @relation("FleetOrigin")
+  fleetsTo      Fleet[]   @relation("FleetTarget")
+
+  @@index([userId])
+  @@index([galaxy, system, position])
+  @@map("planets")
+}
+
+// Buildings on a planet
+model Building {
+  id            String    @id @default(cuid())
+  type          String    // "metalMine", "crystalMine", etc.
+  level         Int       @default(0)
+
+  // Upgrade queue
+  upgrading     Boolean   @default(false)
+  upgradeEndTime DateTime? @map("upgrade_end_time")
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  planet        Planet    @relation(fields: [planetId], references: [id], onDelete: Cascade)
+  planetId      String    @map("planet_id")
+
+  @@unique([planetId, type])
+  @@index([planetId])
+  @@index([upgrading])
+  @@map("buildings")
+}
+
+// Resources on a planet
+model Resources {
+  id            String    @id @default(cuid())
+  metal         Float     @default(500)
+  crystal       Float     @default(300)
+  deuterium     Float     @default(100)
+  energy        Float     @default(0)
+
+  lastUpdate    DateTime  @default(now()) @map("last_update")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  planet        Planet    @relation(fields: [planetId], references: [id], onDelete: Cascade)
+  planetId      String    @unique @map("planet_id")
+
+  @@map("resources")
+}
+
+// Research (account-wide)
+model Research {
+  id            String    @id @default(cuid())
+
+  // Technologies (level)
+  espionageTech       Int @default(0) @map("espionage_tech")
+  computerTech        Int @default(0) @map("computer_tech")
+  weaponsTech         Int @default(0) @map("weapons_tech")
+  shieldingTech       Int @default(0) @map("shielding_tech")
+  armorTech           Int @default(0) @map("armor_tech")
+  energyTech          Int @default(0) @map("energy_tech")
+  hyperspaceTech      Int @default(0) @map("hyperspace_tech")
+  combustionDrive     Int @default(0) @map("combustion_drive")
+  impulseDrive        Int @default(0) @map("impulse_drive")
+  hyperspaceDrive     Int @default(0) @map("hyperspace_drive")
+  laserTech           Int @default(0) @map("laser_tech")
+  ionTech             Int @default(0) @map("ion_tech")
+  plasmaTech          Int @default(0) @map("plasma_tech")
+  astrophysics        Int @default(0)
+  researchNetwork     Int @default(0) @map("research_network")
+  expeditionTech      Int @default(0) @map("expedition_tech")
+  gravitonTech        Int @default(0) @map("graviton_tech")
+
+  // Research queue
+  researching         Boolean   @default(false)
+  currentResearch     String?   @map("current_research")
+  researchEndTime     DateTime? @map("research_end_time")
+
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String    @unique @map("user_id")
+
+  @@map("research")
+}
+
+// Fleet movement
+model Fleet {
+  id              String    @id @default(cuid())
+  mission         String    // "attack", "transport", "deploy", etc.
+
+  // Ships (JSON object)
+  ships           Json      // { lightFighter: 100, cruiser: 50 }
+
+  // Cargo (JSON object, optional)
+  cargo           Json?     // { metal: 10000, crystal: 5000 }
+
+  // Timing
+  departureTime   DateTime  @map("departure_time")
+  arrivalTime     DateTime  @map("arrival_time")
+  returnTime      DateTime? @map("return_time")
+
+  // Fuel
+  fuelConsumption Float     @map("fuel_consumption")
+
+  // Status
+  status          String    @default("traveling") // "traveling", "arrived", "returning"
+  processed       Boolean   @default(false)
+
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String    @map("user_id")
+
+  originPlanet    Planet    @relation("FleetOrigin", fields: [originId], references: [id])
+  originId        String    @map("origin_id")
+
+  targetPlanet    Planet    @relation("FleetTarget", fields: [targetId], references: [id])
+  targetId        String    @map("target_id")
+
+  @@index([userId])
+  @@index([arrivalTime])
+  @@index([returnTime])
+  @@index([status])
+  @@map("fleets")
+}
+
+// Alliance
+model Alliance {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  tag           String    @unique
+  description   String?
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  members       User[]
+
+  @@index([name])
+  @@index([tag])
+  @@map("alliances")
+}
+
+// In-game messages
+model Message {
+  id            String    @id @default(cuid())
+  subject       String
+  body          String
+  read          Boolean   @default(false)
+  type          String    @default("message") // "message", "combat", "spy", "system"
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  sender        User      @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId      String    @map("sender_id")
+
+  recipient     User      @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  recipientId   String    @map("recipient_id")
+
+  @@index([recipientId, read])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+// Premium officers
+model Officer {
+  id            String    @id @default(cuid())
+
+  // Officers (expiration date)
+  commander     DateTime?
+  admiral       DateTime?
+  engineer      DateTime?
+  geologist     DateTime?
+  technocrat    DateTime?
+
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String    @unique @map("user_id")
+
+  @@map("officers")
+}
