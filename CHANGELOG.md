@@ -7,6 +7,133 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Phase 2: Building Upgrade System & WebSocket Integration (2025-11-06)
+
+#### Building Upgrade System
+- **Building Calculator** (`src/lib/game-engine/building-calculator.ts`)
+  - Cost calculation for building upgrades (exponential: base × 2^level)
+  - Construction time formulas based on robotics/nanite factory levels
+  - Prerequisite checking (e.g., Shipyard requires Robotics Factory L2)
+  - Affordability validation
+  - Queue management (one upgrade per planet)
+  - Upgrade completion detection
+
+- **Building Manager** (`src/lib/game-engine/building-manager.ts`)
+  - Start building upgrade with resource deduction
+  - Cancel building upgrade with 100% refund
+  - Complete building upgrade (increment level)
+  - Database transaction safety
+
+- **Building Stats** (`src/lib/game-engine/building-stats.ts`)
+  - Production/consumption calculations for current and next level
+  - Stats for all building types (mines, energy, storage)
+  - Visual comparison helpers (current → next with delta)
+
+#### API Endpoints
+- **GET `/api/buildings`** - Fetch all buildings with upgrade info
+  - Returns building states, costs, times, prerequisites
+  - Includes planet temperature for calculations
+- **POST `/api/buildings/upgrade`** - Start building upgrade
+  - Validates prerequisites and resources
+  - Emits WebSocket event on success
+- **DELETE `/api/buildings/upgrade`** - Cancel building upgrade
+  - Refunds 100% of resources
+  - Emits WebSocket event
+- **POST `/api/buildings/check-completion`** - Check for completed upgrades
+  - Auto-completes finished buildings
+  - Emits WebSocket event for each completion
+- **POST `/api/dev/reset-planet`** - Reset planet to initial state (dev only)
+
+#### Real-time WebSocket System
+- **Custom Next.js Server** (`server.js`)
+  - Socket.io integration with Next.js
+  - User authentication on connection
+  - Room-based messaging (user-specific events)
+  - Global io instance accessible by API routes
+
+- **Server-side Emitters** (`src/lib/socket/server.ts`)
+  - `emitBuildingStarted()` - Building upgrade initiated
+  - `emitBuildingCompleted()` - Building upgrade finished
+  - `emitBuildingCancelled()` - Building upgrade cancelled
+  - `emitResourcesUpdated()` - Resources changed
+
+- **Client-side Hooks** (`src/hooks/useSocket.ts`, `src/hooks/useBuildingCompletion.ts`)
+  - `useSocket()` - Manages WebSocket connection lifecycle
+  - `useSocketEvent()` - Subscribe to specific events
+  - Auto-connect on login, auto-disconnect on logout
+  - Completion checker that triggers WebSocket events
+
+- **Event System** (`src/lib/socket/events.ts`)
+  - Typed event definitions
+  - Payload interfaces for all events
+  - Consistent event naming
+
+#### User Interface Components
+- **BuildingCard** (`src/components/game/BuildingCard.tsx`)
+  - Individual building display with all stats
+  - Current production/consumption display
+  - Next level preview with delta indicators
+  - Upgrade button with affordability check
+  - Live countdown timer (60fps)
+  - Progress bar for active upgrades
+  - Cancel upgrade button
+  - Color-coded resource costs
+  - Prerequisite warnings
+
+- **BuildingList** (`src/components/game/BuildingList.tsx`)
+  - Grid layout with responsive design
+  - Filter tabs (All/Resources/Facilities/Storage)
+  - WebSocket-driven real-time updates
+  - Loading states
+
+- **Updated Header** (`src/components/layouts/header.tsx`)
+  - Added Reset button for testing (yellow)
+  - Spinning icon animation during reset
+
+- **Updated Game Dashboard** (`src/app/game/page.tsx`)
+  - Integrated BuildingList component
+  - Removed old static building display
+
+#### Game Mechanics
+- **Building Prerequisites**: Enforced dependency chain
+- **Energy Management**: Stats show energy impact of upgrades
+- **Resource Costs**: Exponential scaling with level
+- **Construction Time**: Reduced by Robotics Factory and Nanite Factory
+- **Queue System**: One upgrade at a time per planet (OGame-style)
+- **100% Refund**: Cancel anytime for full resource return
+
+#### Real-time Features
+- **Zero Polling**: No periodic API calls for resources
+- **Instant Updates**: WebSocket events trigger UI updates < 100ms
+- **No Page Reloads**: All updates via state management
+- **Smooth Animations**: 60fps resource counters and countdown timers
+- **Event-Driven**: Building actions emit events, components listen
+- **Seamless UX**: No flashing, no scroll jumps, no jarring transitions
+
+#### Developer Experience
+- **100x Universe Speed**: Buildings complete in seconds for testing
+- **Planet Reset**: One-click reset to initial state
+- **Console Logging**: Detailed event tracking and debugging
+- **TypeScript**: Full type safety across all modules
+- **Error Handling**: Graceful degradation and user feedback
+
+#### Performance Optimizations
+- **useCallback**: Memoized functions prevent unnecessary re-renders
+- **React.memo**: Strategic component memoization
+- **requestAnimationFrame**: Efficient 60fps animations
+- **WebSocket**: Eliminates polling overhead
+- **Conditional Rendering**: Only render what's needed
+
+### Technical Improvements
+- Custom Next.js server with Socket.io support
+- Pure WebSocket-driven architecture
+- Event-driven component communication
+- Zero polling design
+- Comprehensive error handling
+- Transaction-safe database operations
+
+---
+
 ### Added - Phase 2: Resource Production System (2025-11-06)
 
 #### Core Game Engine

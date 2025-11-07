@@ -51,24 +51,51 @@
 - ✅ TypeScript strict mode
 - ✅ Database migrations
 
-### 🚧 Phase 2: Core Gameplay (In Progress)
+### ✅ Phase 2: Core Gameplay (COMPLETE!)
 
 **Resource Production System** ✅
 - ✅ Production formulas (Metal, Crystal, Deuterium)
 - ✅ Energy balance system with proportional mine shutdowns
 - ✅ Storage capacity calculations
 - ✅ Time-based resource accumulation
-- ✅ Real-time resource display with smooth animations
+- ✅ Real-time resource display with smooth 60fps animations
 - ✅ Production rate indicators (per hour)
 - ✅ Storage capacity progress bars
 - ✅ Energy warnings and efficiency indicators
 - ✅ REST API endpoint for resource fetching
 - ✅ 32 comprehensive unit tests (all passing)
 
-**Coming Next**
-- ⏳ Building upgrade system with queues
-- ⏳ Research system
-- ⏳ Real-time notifications (Socket.io)
+**Building Upgrade System** ✅
+- ✅ Building cost calculations (exponential scaling)
+- ✅ Construction time formulas (based on robotics/nanite levels)
+- ✅ Prerequisite checking system
+- ✅ One building upgrade queue per planet
+- ✅ Upgrade start/cancel/complete logic
+- ✅ Real-time countdown timers with progress bars
+- ✅ Production/consumption stats display (current → next level)
+- ✅ Visual affordability indicators
+- ✅ Building filtering (Resources/Facilities/Storage)
+- ✅ Automatic resource deduction/refund
+
+**Real-time WebSocket System** ✅
+- ✅ Socket.io server integration with Next.js
+- ✅ User-specific room-based messaging
+- ✅ Instant updates for building start/complete/cancel
+- ✅ Real-time resource updates (no polling)
+- ✅ Zero page reloads - pure WebSocket-driven UI
+- ✅ Toast notifications for all events
+- ✅ Seamless UX with smooth animations
+
+**Developer Tools** ✅
+- ✅ 100x speed mode for rapid testing
+- ✅ Planet reset button (dev only)
+- ✅ Comprehensive console logging
+- ✅ Real-time event tracking
+
+**Coming Next - Phase 3**
+- ⏳ Research system with tech tree
+- ⏳ Fleet production and management
+- ⏳ Combat system
 
 ### 📋 Phase 3: Fleet & Combat (Planned)
 - ⏳ Ship production

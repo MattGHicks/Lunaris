@@ -238,7 +238,7 @@ export function calculateBuildingTime(
 
 export const GAME_SETTINGS = {
   // Universe settings
-  UNIVERSE_SPEED: 1, // Production and build speed multiplier
+  UNIVERSE_SPEED: 100, // Production and build speed multiplier (100x for testing)
   FLEET_SPEED: 1, // Fleet speed multiplier
 
   // Resource settings
@@ -254,6 +254,92 @@ export const GAME_SETTINGS = {
   STARTING_CRYSTAL: 300,
   STARTING_DEUTERIUM: 100,
 } as const;
+
+// ============================================================================
+// BUILDING PREREQUISITES
+// ============================================================================
+
+export interface BuildingPrerequisite {
+  building: string;
+  level: number;
+}
+
+/**
+ * Building prerequisites
+ * Format: { buildingType: [{ building: prerequisiteType, level: minimumLevel }] }
+ */
+export const BUILDING_PREREQUISITES: Record<string, BuildingPrerequisite[]> = {
+  [BUILDING_TYPES.METAL_MINE]: [],
+  [BUILDING_TYPES.CRYSTAL_MINE]: [],
+  [BUILDING_TYPES.DEUTERIUM_SYNTHESIZER]: [],
+  [BUILDING_TYPES.SOLAR_PLANT]: [],
+  [BUILDING_TYPES.FUSION_REACTOR]: [
+    { building: BUILDING_TYPES.DEUTERIUM_SYNTHESIZER, level: 5 },
+  ],
+  [BUILDING_TYPES.METAL_STORAGE]: [],
+  [BUILDING_TYPES.CRYSTAL_STORAGE]: [],
+  [BUILDING_TYPES.DEUTERIUM_TANK]: [],
+  [BUILDING_TYPES.ROBOTICS_FACTORY]: [],
+  [BUILDING_TYPES.SHIPYARD]: [
+    { building: BUILDING_TYPES.ROBOTICS_FACTORY, level: 2 },
+  ],
+  [BUILDING_TYPES.RESEARCH_LAB]: [],
+  [BUILDING_TYPES.ALLIANCE_DEPOT]: [],
+  [BUILDING_TYPES.MISSILE_SILO]: [
+    { building: BUILDING_TYPES.SHIPYARD, level: 1 },
+  ],
+  [BUILDING_TYPES.NANITE_FACTORY]: [
+    { building: BUILDING_TYPES.ROBOTICS_FACTORY, level: 10 },
+  ],
+  [BUILDING_TYPES.TERRAFORMER]: [],
+  [BUILDING_TYPES.SPACE_DOCK]: [
+    { building: BUILDING_TYPES.SHIPYARD, level: 2 },
+  ],
+};
+
+/**
+ * Building names for display
+ */
+export const BUILDING_NAMES: Record<string, string> = {
+  [BUILDING_TYPES.METAL_MINE]: 'Metal Mine',
+  [BUILDING_TYPES.CRYSTAL_MINE]: 'Crystal Mine',
+  [BUILDING_TYPES.DEUTERIUM_SYNTHESIZER]: 'Deuterium Synthesizer',
+  [BUILDING_TYPES.SOLAR_PLANT]: 'Solar Plant',
+  [BUILDING_TYPES.FUSION_REACTOR]: 'Fusion Reactor',
+  [BUILDING_TYPES.METAL_STORAGE]: 'Metal Storage',
+  [BUILDING_TYPES.CRYSTAL_STORAGE]: 'Crystal Storage',
+  [BUILDING_TYPES.DEUTERIUM_TANK]: 'Deuterium Tank',
+  [BUILDING_TYPES.ROBOTICS_FACTORY]: 'Robotics Factory',
+  [BUILDING_TYPES.SHIPYARD]: 'Shipyard',
+  [BUILDING_TYPES.RESEARCH_LAB]: 'Research Lab',
+  [BUILDING_TYPES.ALLIANCE_DEPOT]: 'Alliance Depot',
+  [BUILDING_TYPES.MISSILE_SILO]: 'Missile Silo',
+  [BUILDING_TYPES.NANITE_FACTORY]: 'Nanite Factory',
+  [BUILDING_TYPES.TERRAFORMER]: 'Terraformer',
+  [BUILDING_TYPES.SPACE_DOCK]: 'Space Dock',
+};
+
+/**
+ * Building descriptions
+ */
+export const BUILDING_DESCRIPTIONS: Record<string, string> = {
+  [BUILDING_TYPES.METAL_MINE]: 'Mines metal ore from the planet. Higher levels increase production.',
+  [BUILDING_TYPES.CRYSTAL_MINE]: 'Extracts crystal from underground deposits. Higher levels increase production.',
+  [BUILDING_TYPES.DEUTERIUM_SYNTHESIZER]: 'Synthesizes deuterium from the planet\'s atmosphere. Production affected by temperature.',
+  [BUILDING_TYPES.SOLAR_PLANT]: 'Generates energy from solar radiation. Required to power mines.',
+  [BUILDING_TYPES.FUSION_REACTOR]: 'Advanced energy source. Consumes deuterium but produces massive energy.',
+  [BUILDING_TYPES.METAL_STORAGE]: 'Stores metal. Increases storage capacity for metal.',
+  [BUILDING_TYPES.CRYSTAL_STORAGE]: 'Stores crystal. Increases storage capacity for crystal.',
+  [BUILDING_TYPES.DEUTERIUM_TANK]: 'Stores deuterium. Increases storage capacity for deuterium.',
+  [BUILDING_TYPES.ROBOTICS_FACTORY]: 'Produces construction robots. Reduces building construction time.',
+  [BUILDING_TYPES.SHIPYARD]: 'Constructs ships and defense systems. Required for fleet production.',
+  [BUILDING_TYPES.RESEARCH_LAB]: 'Conducts research. Higher levels unlock new technologies.',
+  [BUILDING_TYPES.ALLIANCE_DEPOT]: 'Stores resources for alliance members. Enables resource sharing.',
+  [BUILDING_TYPES.MISSILE_SILO]: 'Launches interplanetary and interceptor missiles.',
+  [BUILDING_TYPES.NANITE_FACTORY]: 'Produces nanites. Dramatically reduces construction time.',
+  [BUILDING_TYPES.TERRAFORMER]: 'Increases available building fields on the planet.',
+  [BUILDING_TYPES.SPACE_DOCK]: 'Repairs damaged ships at reduced cost.',
+};
 
 // ============================================================================
 // UTILITY TYPES

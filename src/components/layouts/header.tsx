@@ -3,10 +3,12 @@
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { LogOut, User, Rocket } from 'lucide-react';
+import { LogOut, User, Rocket, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
 
 export function Header() {
   const { data: session, status } = useSession();
+  const [isResetting, setIsResetting] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -15,6 +17,36 @@ export function Header() {
     } catch (error) {
       console.error('Sign out error:', error);
       toast.error('Failed to sign out');
+    }
+  };
+
+  const handleResetPlanet = async () => {
+    if (!confirm('⚠️ Reset planet to initial state? This will:\n\n• Cancel all upgrades\n• Reset all buildings to level 1\n• Reset resources to 500/300/100\n\nThis action cannot be undone!')) {
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      const response = await fetch('/api/dev/reset-planet', {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Planet reset successfully! Reloading...');
+        // Reload the page to show fresh data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        toast.error(data.error || 'Failed to reset planet');
+        setIsResetting(false);
+      }
+    } catch (error) {
+      toast.error('An error occurred while resetting planet');
+      console.error('Reset error:', error);
+      setIsResetting(false);
     }
   };
 
@@ -52,6 +84,17 @@ export function Header() {
               <User className="h-4 w-4" />
               <span>{session.user?.name || 'User'}</span>
             </Link>
+
+            {/* Reset button (dev only) */}
+            <button
+              onClick={handleResetPlanet}
+              disabled={isResetting}
+              className="flex items-center space-x-2 rounded-md bg-yellow-600 px-3 py-2 text-sm font-medium hover:bg-yellow-700 disabled:opacity-50"
+              title="Reset planet to initial state (Dev)"
+            >
+              <RefreshCw className={`h-4 w-4 ${isResetting ? 'animate-spin' : ''}`} />
+              <span>Reset</span>
+            </button>
 
             {/* Logout button */}
             <button

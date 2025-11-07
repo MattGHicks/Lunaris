@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { formatResourceAmount, formatProductionRate } from '@/lib/game-engine/resource-calculator';
+import { useSocketEvent } from '@/hooks/useSocket';
+import { SOCKET_EVENTS } from '@/lib/socket/events';
 
 interface ResourceData {
   metal: number;
@@ -59,24 +61,43 @@ export function ResourceDisplay({
   const animationFrameRef = useRef<number | undefined>(undefined);
 
   // Fetch resources from API
-  const fetchResources = async () => {
+  const fetchResources = useCallback(async () => {
     try {
+      console.log('Fetching resources for planet:', planetId);
       const response = await fetch(`/api/resources?planetId=${planetId}`);
       if (response.ok) {
         const data = await response.json();
-        setServerResources(data.resources);
-        setProductionRates(data.productionRates);
-        setStorageCapacity(data.storageCapacity);
-        setEnergyBalance(data.energyBalance);
+        console.log('Resources fetched:', {
+          metal: data.resources.metal,
+          crystal: data.resources.crystal,
+          deuterium: data.resources.deuterium,
+          energy: data.resources.energy,
+        });
+        console.log('Production rates:', data.productionRates);
+        console.log('Energy balance:', data.energyBalance);
+
+        // Create new objects to force React re-render
+        const newResources = { ...data.resources };
+        const newProductionRates = { ...data.productionRates };
+        const newStorageCapacity = { ...data.storageCapacity };
+        const newEnergyBalance = { ...data.energyBalance };
+
+        setServerResources(newResources);
+        setDisplayResources(newResources); // Immediately update display
+        setProductionRates(newProductionRates);
+        setStorageCapacity(newStorageCapacity);
+        setEnergyBalance(newEnergyBalance);
         lastUpdateRef.current = Date.now();
+
+        console.log('State updated successfully - displayResources:', newResources);
       }
     } catch (error) {
       console.error('Failed to fetch resources:', error);
     }
-  };
+  }, [planetId]);
 
   // Interpolate resources based on production rates
-  const interpolateResources = () => {
+  const interpolateResources = useCallback(() => {
     const now = Date.now();
     const deltaTime = (now - lastUpdateRef.current) / 1000; // in seconds
 
@@ -106,25 +127,41 @@ export function ResourceDisplay({
     });
 
     animationFrameRef.current = requestAnimationFrame(interpolateResources);
-  };
+  }, [serverResources, productionRates, storageCapacity, energyBalance]);
 
-  // Setup polling and interpolation
+  // Listen for Socket.io events and refresh resources
+  useSocketEvent(SOCKET_EVENTS.BUILDING_STARTED, useCallback(() => {
+    console.log('Building started, refreshing resources');
+    fetchResources();
+  }, [fetchResources]));
+
+  useSocketEvent(SOCKET_EVENTS.BUILDING_COMPLETED, useCallback(() => {
+    console.log('Building completed, refreshing resources');
+    fetchResources();
+  }, [fetchResources]));
+
+  useSocketEvent(SOCKET_EVENTS.BUILDING_CANCELLED, useCallback(() => {
+    console.log('Building cancelled, refreshing resources');
+    fetchResources();
+  }, [fetchResources]));
+
+  // Setup interpolation only (no polling - WebSocket handles updates)
   useEffect(() => {
-    // Start interpolation loop
-    animationFrameRef.current = requestAnimationFrame(interpolateResources);
+    // Cancel any existing animation frame
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
 
-    // Poll API every 10 seconds
-    const pollInterval = setInterval(fetchResources, 10000);
+    // Start interpolation loop with current data
+    animationFrameRef.current = requestAnimationFrame(interpolateResources);
 
     // Cleanup
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      clearInterval(pollInterval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planetId]);
+  }, [interpolateResources, serverResources, productionRates]);
 
   // Calculate storage percentage
   const getStoragePercentage = (current: number, max: number) => {

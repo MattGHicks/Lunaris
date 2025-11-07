@@ -4,6 +4,7 @@ import prisma from '@/lib/db';
 import { Header } from '@/components/layouts/header';
 import { Toaster } from 'sonner';
 import { ResourceDisplay } from '@/components/game/ResourceDisplay';
+import { BuildingList } from '@/components/game/BuildingList';
 import { calculateCurrentResources } from '@/lib/game-engine/resource-calculator';
 import type { PlanetData } from '@/lib/game-engine/resource-calculator';
 
@@ -90,32 +91,21 @@ export default async function GamePage() {
                 />
               </div>
 
-              {/* Buildings */}
-              <div className="mt-6">
-                <h3 className="text-lg font-semibold">Buildings</h3>
-                <div className="mt-2 grid gap-2">
-                  {mainPlanet.buildings.map((building) => (
-                    <div
-                      key={building.id}
-                      className="flex items-center justify-between rounded-md bg-gray-700 p-3"
-                    >
-                      <span className="capitalize">
-                        {building.type.replace(/([A-Z])/g, ' $1').trim()}
-                      </span>
-                      <span className="font-semibold">Level {building.level}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
-          {/* Coming soon message */}
-          <div className="rounded-lg border border-gray-700 bg-gray-800 p-6 text-center">
-            <p className="text-gray-400">
-              More features coming soon! Building upgrade system is next.
-            </p>
-          </div>
+          {/* Buildings Section */}
+          {mainPlanet && (
+            <div className="rounded-lg bg-gray-800 p-6">
+              <h2 className="text-xl font-bold">Buildings</h2>
+              <p className="mt-1 text-sm text-gray-400">
+                Upgrade buildings to improve production and unlock new features
+              </p>
+              <div className="mt-6">
+                <BuildingList planetId={mainPlanet.id} />
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
