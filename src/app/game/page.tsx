@@ -1,6 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/db';
+import Link from 'next/link';
 import { Header } from '@/components/layouts/header';
 import { Toaster } from 'sonner';
 import { ResourceDisplay } from '@/components/game/ResourceDisplay';
@@ -64,6 +65,40 @@ export default async function GamePage() {
             <p className="mt-2 text-gray-400">
               Your empire awaits. Build your empire and conquer the galaxy!
             </p>
+          </div>
+
+          {/* Navigation Menu */}
+          <div className="flex space-x-4 border-b border-gray-700 pb-2">
+            <Link
+              href="/game"
+              className="px-4 py-2 text-blue-400 border-b-2 border-blue-400 font-medium"
+            >
+              Overview
+            </Link>
+            <Link
+              href="/game/research"
+              className="px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
+            >
+              Research
+            </Link>
+            <Link
+              href="/game/shipyard"
+              className="px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
+            >
+              Shipyard
+            </Link>
+            <Link
+              href="/game/fleet"
+              className="px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
+            >
+              Fleet
+            </Link>
+            <Link
+              href="/game/missions"
+              className="px-4 py-2 text-gray-400 hover:text-gray-300 transition-colors"
+            >
+              Missions
+            </Link>
           </div>
 
           {/* Planet overview */}
